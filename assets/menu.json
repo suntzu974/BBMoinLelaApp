@@ -1,0 +1,14 @@
+[
+	{
+		"name":"Information",
+		"label":"Information sur application",
+		"picture":"icons/ic_info.png",
+		"action":"helpPage.qml"
+	},
+	{
+		"name":"Compte",
+		"label":"Authentification sur le site www.moinlela.com",
+		"picture":"icons/ic_edit_profile.png",
+		"action":"userPage.qml"
+	}
+]
