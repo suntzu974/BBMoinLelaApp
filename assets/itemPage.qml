@@ -60,7 +60,7 @@ Page {
                         id: itemRoot
                         title: ListItemData.name
                         description: ListItemData.label
-                        status: "Note :"+ ListItemData.stars
+                        status: ListItemData.region
                         image:itemRoot.ListItem.view.imageBase64(ListItemData.encoded)
                     }
                 }  

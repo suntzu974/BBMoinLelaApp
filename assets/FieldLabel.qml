@@ -13,7 +13,7 @@
 * limitations under the License.
 */
 
-import bb.cascades 1.4
+import bb.cascades 1.0
 
 //! [0]
 Container {
@@ -56,7 +56,7 @@ Container {
 
         textStyle {
             base: SystemDefaults.TextStyles.BodyText
-            color: Color.Black
+            color: Color.White
         }
 
         multiline: true

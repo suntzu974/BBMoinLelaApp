@@ -20,9 +20,14 @@ Page {
         title: "Enregistrer"
             onTriggered: {
                 // handle task creation here.
-                _requestService.requestPostItem(itemName.text.toString(),itemLabel.text.toString(),itemRegionID.selectedIndex+1,itemCountry.text.toString(),itemRegion.text.toString(),itemTown.text.toString(),itemZipcode.text.toString(),itemAddress.text.toString(),itemPhone.text.toString(),itemMobile.text.toString(),_app.getLatitude(),_app.getLongitude(),itemPicture.imageSource);
+                _requestService.requestPostItem(itemName.text.toString(),itemLabel.text.toString(),itemRegionID.selectedIndex+1,
+                                itemCountry.text.toString(),itemRegion.text.toString(),
+                                itemTown.text.toString(),itemZipcode.text.toString(),
+                                itemAddress.text.toString(),itemPhone.text.toString(),
+                                itemMobile.text.toString(),
+                                placePicker.selectedPlace ? placePicker.selectedPlace["latitude"] : "",placePicker.selectedPlace ? placePicker.selectedPlace["longitude"] : "",
+                                itemPicture.imageSource);
                 _requestService.stackRate(rateBudget.value, rateService.value,rateQuality.value,ratePrivacy.value,rateAmbience.value)
-//                navigationPane.pop();
             }
         }
         dismissAction: ActionItem {
@@ -41,7 +46,6 @@ Page {
             onTriggered: {
                 // Add picture
                 picker.open()
-//                appInvoker.onInvokeButtonClicked();
             }
         },
         ActionItem {
@@ -49,11 +53,12 @@ Page {
             imageSource: "asset:///images/pin.png"
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
+                placePicker.selectPlace()
                 map.removeAllPins()
                 map.setZoom(19)
-                map.setCenter(_app.getLatitude(), _app.getLongitude())
+//                map.setCenter(_app.getLatitude(), _app.getLongitude())
+                map.setCenter(placePicker.selectedPlace ? placePicker.selectedPlace["latitude"] : "", placePicker.selectedPlace ? placePicker.selectedPlace["longitude"] : "");
                 map.createPushPin(map.center[0], map.center[1], qsTr("I am a Pin"))
-                placePicker.selectPlace()
             }
         }
     ]
@@ -109,6 +114,17 @@ Page {
                     hintText: "Nom"
                     onTextChanging: {
                     }
+                    validator: Validator {
+                        mode: ValidationMode.FocusLost
+                        errorMessage: "must be full"
+                        onValidate: {
+                            // validate a passwordField's text and set appropriate state.
+                            if (itemName.text.length >= 3)
+                                state = ValidationState.Valid;
+                            else
+                                state = ValidationState.Invalid;
+                        }
+                    }
                     textStyle.fontSize: FontSize.Large
                     preferredHeight: 50
                 }
@@ -135,27 +151,7 @@ Page {
             active: _requestService.active
         }
         //! [2]
-        Container {
 
-            FieldLabel {
-                title: qsTr("street")
-                field: "street"
-                selectedPlace: placePicker.selectedPlace
-            }
-            
-            FieldLabel {
-                title: qsTr("city")
-                field: "city"
-                selectedPlace: placePicker.selectedPlace
-            }
-            
-            FieldLabel {
-                title: qsTr("region")
-                field: "region"
-                selectedPlace: placePicker.selectedPlace
-            }
-
-        }
         Container {
             layout: StackLayout {
                 orientation: LayoutOrientation.LeftToRight
@@ -164,7 +160,7 @@ Page {
 
             TextField {
                 id: itemCountry
-                text: _requestService.itemCountry
+                text: placePicker.selectedPlace ? placePicker.selectedPlace["country"] : ""
                 inputMode: TextFieldInputMode.Text
                 input.submitKey: SubmitKey.Next
                 textStyle.textAlign: TextAlign.Left
@@ -178,7 +174,7 @@ Page {
             }
             TextField {
                 id: itemRegion
-                text:_requestService.itemRegion
+                text:placePicker.selectedPlace ? placePicker.selectedPlace["region"] : ""
                 inputMode: TextFieldInputMode.Text
                 input.submitKey: SubmitKey.Next
                 textStyle.textAlign: TextAlign.Left
@@ -201,7 +197,7 @@ Page {
             bottomPadding: 10
             TextField {
                 id: itemZipcode
-                text: _requestService.itemZipcode
+                text: placePicker.selectedPlace ? placePicker.selectedPlace["postal"] : ""
                 inputMode: TextFieldInputMode.Text
                 input.submitKey: SubmitKey.Next
                 textStyle.textAlign: TextAlign.Left
@@ -215,7 +211,7 @@ Page {
             }
             TextField {
                 id: itemTown
-                text: _requestService.itemTown
+                text: placePicker.selectedPlace ? placePicker.selectedPlace["city"] : ""
                 inputMode: TextFieldInputMode.Text
                 input.submitKey: SubmitKey.Next
                 textStyle.textAlign: TextAlign.Left
@@ -231,7 +227,7 @@ Page {
         }
         TextField {
             id: itemAddress
-            text: _requestService.itemAddress
+            text: placePicker.selectedPlace ? placePicker.selectedPlace["street"] : ""
             inputMode: TextFieldInputMode.Text
             input.submitKey: SubmitKey.Next
             textStyle.textAlign: TextAlign.Left
@@ -519,7 +515,6 @@ Page {
                 selectedPlace = show()
             }
         }
-
     ]
 
     onCreationCompleted: {

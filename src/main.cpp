@@ -16,12 +16,14 @@
 
 #include "applicationui.hpp"
 #include <bb/cascades/Application>
-#include <bb/cascades/places/PlacePicker>
-#include <bb/cascades/places/SelectedPlace>
+
 #include <QLocale>
 #include <QTranslator>
 #include <bb/system/phone/Phone>
 #include <Qt/qdeclarativedebug.h>
+#include <bb/cascades/places/PlacePicker>
+#include <bb/cascades/places/SelectedPlace>
+
 #include "MoinLelaRequest.hpp"
 
 using namespace bb::cascades;
@@ -29,12 +31,12 @@ using namespace bb::cascades;
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
     Application app(argc, argv);
-    // Register our custom control
     qmlRegisterType<bb::cascades::places::PlacePicker>("bb.cascades.places", 1, 0, "PlacePicker");
     qmlRegisterUncreatableType<bb::cascades::places::SelectedPlace>("bb.cascades.places", 1, 0, "SelectedPlace", "");
     qmlRegisterType<bb::system::phone::Phone>("bb.system.phone", 1, 0, "Phone");
     qmlRegisterType<WebMaps>("com.moinlela.webmaps",1, 0, "WebMaps");
-    qmlRegisterType<MoinLelaRequest>("com.moinlela.MoinLelaRequest", 1, 0, "MoinLelaRequest");
+    // Register WeatherService class as qml type
+        qmlRegisterType<MoinLelaRequest>("com.moinlela.MoinLelaRequest", 1, 0, "MoinLelaRequest");
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.
     ApplicationUI appui;
